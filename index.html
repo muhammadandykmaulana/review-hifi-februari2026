@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Indosat HiFi - Februari 2026</title>
+    <style>
+        :root {
+            --primary: #FFD700; /* Kuning Indosat-ish */
+            --danger: #FF4B4B;
+            --success: #00C851;
+            --dark: #1a1a1a;
+            --light: #f4f4f4;
+            --accent: #333;
+            --info: #4da6ff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            overflow: hidden; /* Prevent scrolling, treat as slides */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Slide Container */
+        .slide-container {
+            flex: 1;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .slide {
+            position: absolute;
+            width: 80%;
+            max-width: 900px;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.5s ease-in-out;
+            pointer-events: none;
+            display: none; /* Hide fully */
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: all;
+            display: block;
+        }
+
+        /* Content Styling */
+        h1 {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2rem;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        p, li {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: #ddd;
+        }
+
+        strong {
+            color: var(--primary);
+        }
+        
+        a {
+            color: var(--primary);
+            text-decoration: none;
+            border-bottom: 1px dashed var(--primary);
+            transition: all 0.2s;
+        }
+
+        a:hover {
+            color: #fff;
+            border-bottom: 1px solid #fff;
+        }
+        
+        .note {
+            font-size: 0.9rem;
+            color: #aaa;
+            font-style: italic;
+        }
+
+        .highlight-box {
+            background: var(--accent);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid var(--primary);
+            margin: 20px 0;
+        }
+
+        .info-box {
+            background: rgba(77, 166, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid var(--info);
+            margin: 20px 0;
+        }
+
+        .danger-box {
+            background: rgba(255, 75, 75, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid var(--danger);
+            margin: 20px 0;
+        }
+        
+        .success-box {
+            background: rgba(0, 200, 81, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid var(--success);
+            margin: 20px 0;
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            background: #333;
+            padding: 2px;
+            border-radius: 5px;
+        }
+
+        .timeline-item {
+            background: #444;
+            padding: 10px;
+            flex: 1;
+            text-align: center;
+            border-right: 1px solid #555;
+            font-size: 0.9rem;
+        }
+        
+        .timeline-item:last-child { border: none; }
+        .timeline-item.bad { background: #5a2a2a; color: #ffadad; }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: #000;
+            z-index: 10;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: var(--primary);
+            color: var(--dark);
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        button:disabled {
+            background: #555;
+            cursor: not-allowed;
+        }
+
+        .btn-fullscreen {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-fullscreen:hover {
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .progress-bar {
+            height: 5px;
+            background: var(--accent);
+            width: 100%;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.5rem; }
+            .slide { width: 90%; }
+            p, li { font-size: 1rem; }
+            .timeline { flex-direction: column; }
+            .timeline-item { margin-bottom: 5px; }
+            .controls { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="progress-bar">
+        <div class="progress-fill" id="progress"></div>
+    </div>
+
+    <div class="slide-container">
+        
+        <!-- Slide 1: Intro -->
+        <div class="slide active">
+            <h1>Review Jujur Indosat HiFi</h1>
+            <h3 style="color: #bbb;">(dulu MNC Play)</h3>
+            <p style="margin-top: 20px; color: #888;">Edisi Februari 2026 | Pengalaman 1 Tahun 1 Bulan</p>
+            <div class="highlight-box">
+                <p><strong>Highlight Utama:</strong></p>
+                <ul>
+                    <li>Pengalaman Paket 20 Mbps (Rp 205.350)</li>
+                    <li>Uji Teknis (IPv6, Speedtest SG, ZTE 990)</li>
+                    <li><span style="color: var(--success); font-weight:bold;">Killer Feature:</span> Bebas Denda Putus Langganan!</li>
+                </ul>
+            </div>
+            <p><em>Klik "Next" untuk lanjut...</em></p>
+        </div>
+
+        <!-- Slide 2: Outline -->
+        <div class="slide">
+            <h2>Outline Presentasi</h2>
+            <p>Apa saja yang akan kita bahas?</p>
+            <div class="info-box" style="background: transparent; border: none; padding: 0;">
+                <ol style="margin-left: 20px; color: var(--light);">
+                    <li><strong>Flashback:</strong> Pengalaman Pertama (Upgrade Speed).</li>
+                    <li><strong>Setup Sekarang:</strong> Paket 20 Mbps & Perangkat.</li>
+                    <li><strong>Bedah Teknis:</strong> Geek Mode (no IPv6, WPA3, international link (stabil) & belum support Smart Connect).</li>
+                    <li><strong>Drama Billing:</strong> Sisi Lain Skema Prabayar (wajib ditanyakan sebelum langganan).</li>
+                    <li><strong>Keunggulan Absolut:</strong> Kebijakan Tanpa Denda.</li>
+                    <li><strong>Kesimpulan:</strong> Worth it atau skip?</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 3: Flashback (First Account) -->
+        <div class="slide">
+            <h2>1. Pengalaman Pertama (Akhir 2024)</h2>
+            <p>Awal mula kenalan sama HiFi di rumah lama. Kesannya manis.</p>
+            
+            <div class="highlight-box">
+                <ul>
+                    <li><strong>Paket Awal:</strong> 15 Mbps (Rp 199.800).</li>
+                    <li><strong>Kejutan:</strong> Upgrade speed jadi <strong>50 Mbps</strong> selama 3 bulan di bulan ke-5 tanpa biaya tambahan.</li>
+                    <li><strong>Status:</strong> Very Satisfied.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 4: The Current Setup (Feb 2026) -->
+        <div class="slide">
+            <h2>2. Pindah Rumah (Februari 2026)</h2>
+            <p>Langganan baru di lokasi baru. Ada sedikit kenaikan harga & beda paket.</p>
+            
+            <div class="info-box">
+                <ul>
+                    <li><strong>Paket:</strong> 20 Mbps.</li>
+                    <li><strong>Tagihan:</strong> <strong>Rp 205.350</strong> / bulan.</li>
+                    <li><strong>Perangkat:</strong> Tetap ZTE 990 (Dual Band).</li>
+                </ul>
+            </div>
+            <p class="note"><strong>Catatan Penting:</strong> Cek website resmi. Paket bandwidth kecil (< 20 Mbps) biasanya hanya tersedia di area tertentu. Pastikan validasi ke website resmi sebelum deal.</p>
+        </div>
+
+        <!-- Slide 5: Bedah Teknis (Deep Dive) -->
+        <div class="slide">
+            <h2>3. Bedah Teknis (Geek Mode)</h2>
+            <p>Hasil iseng-iseng nge-test jaringan & modem ZTE 990:</p>
+            <ul>
+                <li><strong>Network:</strong> No IPv6. Bonus Bandwidth +2 Mbps. Inter Link 1:1 (Verizon SG).</li>
+                <li><strong>Fitur Modem (ZTE 990):</strong>
+                    <ul>
+                        <li><span style="color: var(--success);">Plus:</span> Support <strong>WPA3 Personal</strong> (Keamanan Modern).</li>
+                        <li><span style="color: var(--danger);">Minus:</span> Belum support <strong>Smart Connect</strong>.</li>
+                    </ul>
+                </li>
+                <li><strong>Comparison Note:</strong>
+                    <br><span class="note">Di ZTE ini SSID 2.4G & 5G terpisah, user harus pilih manual. Kalah canggih sama router 3rd party kayak <a href="https://s.shopee.co.id/30iO2TP2oL" target="_blank" title="Beli di Shopee"><strong>TP-Link Mercusys MR60X</strong></a> (Harga ~Rp 411rb via voucher Shopee Feb 2026) yang udah bisa auto-optimize user (Smart Connect).</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Slide 6: The Billing Drama -->
+        <div class="slide">
+            <h2 style="color: var(--danger);">4. Drama Billing (The Ugly)</h2>
+            <p>Kejadian di akun kedua ini. Sistem <strong>Prabayar</strong> tapi kaku.</p>
+
+            <div class="danger-box">
+                <p><strong>Kasus: Telat Bayar di Paket 20 Mbps</strong></p>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <strong>Tgl 10</strong><br>
+                        Jatuh Tempo<br>
+                        (Isolir)
+                    </div>
+                    <div class="timeline-item bad">
+                        <strong>Tgl 10 - 25</strong><br>
+                        Internet Mati<br>
+                        (Tagihan Tetap Jalan)
+                    </div>
+                    <div class="timeline-item">
+                        <strong>Tgl 25</strong><br>
+                        Baru Bayar<br>
+                        (Hangus 15 Hari)
+                    </div>
+                </div>
+                <p style="margin-top: 10px; font-size: 0.9rem;">
+                    Saat bayar tgl 25, masa aktif tgl 10-25 yang mati itu <strong>HANGUS</strong>. Kita bayar hari kosong. Kadang billing error (tagihan mecah), jadi harus bayar 2-3x sampai blokir kebuka.
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 7: Keunggulan Utama -->
+        <div class="slide">
+            <h2 style="color: var(--success);">5. Keunggulan: Tanpa Denda!</h2>
+            <p>Ini fitur yang jarang dimiliki provider lain.</p>
+            
+            <div class="success-box">
+                <h3>Bebas Kontrak Mengikat</h3>
+                <p>Berdasarkan pengalaman 1 tahun 1 bulan ini:</p>
+                <ul>
+                    <li>Kalau mau berhenti langganan sebelum 1 tahun, <strong>TIDAK ADA DENDA</strong>.</li>
+                    <li>Biasanya provider lain kena penalti (estimasi) 500rb - 1 Juta.</li>
+                    <li>Di HiFi, cukup lapor atau tunggu saja 3 bulanan, kembalikan alat ke teknisi pengambilan alat (jgn nunggu sales, teknisi instalasi, karena beda), selesai. Tanpa drama tagihan susulan.</li>
+                </ul>
+            </div>
+            <p>Cocok banget buat anak kos atau yang ngontrak rumah jangka pendek.</p>
+        </div>
+
+        <!-- Slide 8: Tips & Keamanan -->
+        <div class="slide">
+            <h2>6. Tips Keamanan & Pembayaran</h2>
+            <p>Belajar dari pengalaman, ini tips buat calon pelanggan:</p>
+            
+            <div class="highlight-box">
+                <ol>
+                    <li><strong>Official Only:</strong> Bayar HANYA ke channel pembayaran resmi (App, E-Wallet, Retail Resmi). Jangan titip ke orang/teknisi.</li>
+                    <li><strong>Cek Area:</strong> Pastikan coveragenya valid (cek tiang/brosur).</li>
+                    <li><strong>Antisipasi Billing:</strong> Karena sistem denda/isolir ribet, usahakan jangan telat bayar lewat tanggal jatuh tempo.</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 9: Kesimpulan -->
+        <div class="slide">
+            <h1>Kesimpulan Akhir</h1>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <div style="flex: 1; background: #333; padding: 20px; border-radius: 10px;">
+                    <h3 style="color: var(--success);">👍 The Good</h3>
+                    <ul>
+                        <li><strong>NO PENALTY</strong> (Bebas denda putus kontrak).</li>
+                        <li>Speed Internasional Stabil (1:1).</li>
+                        <li>Support <strong>WPA3</strong> (Secure).</li>
+                    </ul>
+                </div>
+                <div style="flex: 1; background: #333; padding: 20px; border-radius: 10px;">
+                    <h3 style="color: var(--danger);">👎 The Bad</h3>
+                    <ul>
+                        <li>Billing system kaku & ribet jika telat.</li>
+                        <li>Belum <strong>Smart Connect</strong> (Pilih Manual SSID).</li>
+                        <li>Harus bayar hari kosong (No Prorate).</li>
+                    </ul>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 30px;">
+                <em>"Koneksi Joss, Perangkat Oke, tapi Sistem Bayar butuh perbaikan."</em>
+            </p>
+        </div>
+
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="controls">
+        <button id="prevBtn" onclick="changeSlide(-1)">❮ Back</button>
+        <button class="btn-fullscreen" onclick="toggleFullScreen()" id="fsBtn">⛶ Full Screen</button>
+        <button id="nextBtn" onclick="changeSlide(1)">Next ❯</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressFill = document.getElementById('progress');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const fsBtn = document.getElementById('fsBtn');
+
+        function updateSlide() {
+            // Hide all
+            slides.forEach(slide => slide.classList.remove('active'));
+            
+            // Show current
+            slides[currentSlide].classList.add('active');
+
+            // Update Progress Bar
+            const percentage = ((currentSlide + 1) / slides.length) * 100;
+            progressFill.style.width = percentage + '%';
+
+            // Button states
+            prevBtn.disabled = currentSlide === 0;
+            if (currentSlide === slides.length - 1) {
+                nextBtn.innerHTML = "Finish";
+            } else {
+                nextBtn.innerHTML = "Next ❯";
+            }
+        }
+
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < slides.length - 1) {
+                currentSlide++;
+            } else if (direction === -1 && currentSlide > 0) {
+                currentSlide--;
+            }
+            updateSlide();
+        }
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch((err) => {
+                    alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        // Listen for fullscreen change events to update button text
+        document.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement) {
+                fsBtn.innerHTML = "✖ Exit Full";
+            } else {
+                fsBtn.innerHTML = "⛶ Full Screen";
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') changeSlide(1);
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'f') toggleFullScreen();
+        });
+
+        // Initialize
+        updateSlide();
+    </script>
+</body>
+</html>
