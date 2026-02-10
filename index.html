@@ -190,46 +190,7 @@
             cursor: zoom-in; /* Indicate zoomable */
         }
 
-        /* Tab Styles */
-        .tab-controls {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
-
-        .tab-btn {
-            background: #333;
-            color: #ccc;
-            border: 1px solid #555;
-            padding: 8px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .tab-btn.active {
-            background: var(--primary);
-            color: #000;
-            border-color: var(--primary);
-            font-weight: bold;
-        }
-
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s;
-        }
-
-        .tab-content.active {
-            display: flex; /* Matches gallery-scroll display */
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+        /* --- URUTAN CSS DIPERBAIKI (Gallery dulu, baru Tab Content) --- */
 
         .gallery-scroll {
             display: flex;
@@ -265,6 +226,49 @@
         .gallery-scroll::-webkit-scrollbar { height: 8px; }
         .gallery-scroll::-webkit-scrollbar-track { background: #222; border-radius: 4px; }
         .gallery-scroll::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+
+        /* Tab Styles (DITARUH SETELAH GALLERY AGAR OVERRIDE JALAN) */
+        .tab-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .tab-btn {
+            background: #333;
+            color: #ccc;
+            border: 1px solid #555;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: #000;
+            border-color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* INI KUNCINYA: display: none harus menang melawan display: flex dari gallery-scroll */
+        .tab-content {
+            display: none !important; /* Pakai !important untuk memastikan hidden */
+            animation: fadeIn 0.3s;
+        }
+
+        .tab-content.active {
+            display: flex !important; /* Pakai !important untuk memastikan muncul sebagai flex */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
         /* Lightbox (Zoom) Styles */
         .lightbox {
@@ -428,7 +432,7 @@
                 <p><strong>Highlight Utama:</strong></p>
                 <ul>
                     <li>Pengalaman Paket 20 Mbps (Rp 205.350)</li>
-                    <li>Uji Teknis (IPv6, Speedtest SG, ZTE 990)</li>
+                    <li>Uji Teknis (IPv6, Speedtest SG, ZTE ZXHN 679L)</li>
                     <li><span style="color: var(--success); font-weight:bold;">Killer Feature:</span> Bebas Denda Putus Langganan!</li>
                 </ul>
             </div>
@@ -443,7 +447,7 @@
                 <ol style="margin-left: 20px; color: var(--light);">
                     <li><strong>Flashback:</strong> Pengalaman Pertama (Upgrade Speed).</li>
                     <li><strong>Setup Sekarang:</strong> Paket 20 Mbps & Perangkat.</li>
-                    <li><strong>Bedah Teknis:</strong> Geek Mode (IPv6, WPA3, Link Stabil).</li>
+                    <li><strong>Bedah Teknis:</strong> Bedah Teknis - Link Stabil.</li>
                     <li><strong>Drama Billing:</strong> Sisi Lain Skema Prabayar.</li>
                     <li><strong>Keunggulan Absolut:</strong> Kebijakan Tanpa Denda.</li>
                     <li><strong>Kesimpulan:</strong> Worth it atau skip?</li>
@@ -480,14 +484,14 @@
                 <ul>
                     <li><strong>Paket:</strong> 20 Mbps.</li>
                     <li><strong>Tagihan:</strong> <strong>Rp 205.350</strong> / bulan.</li>
-                    <li><strong>Perangkat:</strong> Tetap ZTE 990 (Dual Band).</li>
+                    <li><strong>Perangkat:</strong> Tetap ZTE ZXHN 679L (Dual Band). Keunggulan: Jangkauan Luas, Support 2 Band (2.4G dan 5G)</li>
                 </ul>
             </div>
             
             <!-- GAMBAR TAMBAHAN SLIDE 4 -->
             <div class="slide-image-container">
-                <img src="perangkat-hifi.jpg" alt="Modem ZTE 990 Indosat HiFi" onclick="openLightbox(this.src, this.alt)">
-                <p class="note">Perangkat Modem ZTE 990</p>
+                <img src="perangkat-hifi.jpg" alt="Modem ZTE ZXHN 679L Indosat HiFi" onclick="openLightbox(this.src, this.alt)">
+                <p class="note">Perangkat Modem ZTE ZXHN 679L</p>
             </div>
 
             <p class="note" style="margin-top: 10px;"><strong>Catatan Penting:</strong> Cek website resmi. Paket bandwidth kecil (< 20 Mbps) biasanya hanya tersedia di area tertentu.</p>
@@ -496,7 +500,7 @@
         <!-- Slide 5: Bedah Teknis (Deep Dive) -->
         <div class="slide">
             <h2>3. Bedah Teknis (Geek Mode)</h2>
-            <p>Hasil iseng-iseng nge-test jaringan & modem ZTE 990:</p>
+            <p>Hasil iseng-iseng nge-test jaringan & modem ZTE ZXHN 679L:</p>
             <ul>
                 <li><strong>Network:</strong> No IPv6. Bonus Bandwidth +2 Mbps. Inter Link 1:1 (Verizon Singapura).</li>
                 <li><strong>Fitur Modem:</strong>
@@ -533,7 +537,7 @@
         <!-- Slide 6: The Billing Drama -->
         <div class="slide">
             <h2 style="color: var(--danger);">4. Drama Billing (The Ugly)</h2>
-            <p>Kejadian di akun kedua ini. Sistem <strong>Prabayar</strong> tapi kaku.</p>
+            <p>Kejadian langganan kedua. Sistem <strong>Prabayar</strong> tapi ribet.</p>
 
             <div class="danger-box">
                 <p><strong>Kasus: Telat Bayar di Paket 20 Mbps</strong></p>
@@ -599,7 +603,7 @@
                     <h3 style="color: var(--success);">👍 The Good</h3>
                     <ul>
                         <li><strong>NO PENALTY</strong> (Bebas denda putus kontrak).</li>
-                        <li>Speed Internasional Upload:Download = 1:1.</li>
+                        <li>Speed Upload:Download = 1:1 (Target Test: Verizon Singapur)</li>
                         <li>Support <strong>WPA2/3 Personal</strong> (Secure dibanding Enkripsi WEP).</li>
                     </ul>
                 </div>
