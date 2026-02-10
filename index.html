@@ -40,46 +40,60 @@
             align-items: center;
             width: 100%;
             height: 100%;
+            overflow: hidden; /* Ensure no body scroll */
         }
 
         .slide {
             position: absolute;
-            width: 80%;
-            max-width: 900px;
+            width: 90%; /* Lebar responsif */
+            max-width: 1000px;
             opacity: 0;
             transform: translateX(100px);
             transition: all 0.5s ease-in-out;
             pointer-events: none;
             display: none; /* Hide fully */
+            max-height: 85vh; /* Batasi tinggi slide */
+            overflow-y: auto; /* Scroll jika konten terlalu panjang */
+            padding-right: 10px; /* Space for scrollbar */
+            padding-bottom: 20px;
         }
+
+        /* Custom scrollbar for slide content */
+        .slide::-webkit-scrollbar { width: 5px; }
+        .slide::-webkit-scrollbar-track { background: transparent; }
+        .slide::-webkit-scrollbar-thumb { background: #555; border-radius: 3px; }
+
 
         .slide.active {
             opacity: 1;
             transform: translateX(0);
             pointer-events: all;
-            display: block;
+            display: flex; 
+            flex-direction: column;
+            justify-content: flex-start; 
         }
 
         /* Content Styling */
         h1 {
             font-size: 3rem;
             color: var(--primary);
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             line-height: 1.2;
         }
 
         h2 {
             font-size: 2rem;
             border-bottom: 2px solid var(--primary);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
             display: inline-block;
+            margin-top: 0;
         }
 
         p, li {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            margin-bottom: 15px;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 10px;
             color: #ddd;
         }
 
@@ -107,40 +121,40 @@
 
         .highlight-box {
             background: var(--accent);
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
             border-left: 5px solid var(--primary);
-            margin: 20px 0;
+            margin: 15px 0;
         }
 
         .info-box {
             background: rgba(77, 166, 255, 0.1);
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
             border-left: 5px solid var(--info);
-            margin: 20px 0;
+            margin: 15px 0;
         }
 
         .danger-box {
             background: rgba(255, 75, 75, 0.1);
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
             border-left: 5px solid var(--danger);
-            margin: 20px 0;
+            margin: 15px 0;
         }
         
         .success-box {
             background: rgba(0, 200, 81, 0.1);
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
             border-left: 5px solid var(--success);
-            margin: 20px 0;
+            margin: 15px 0;
         }
 
         .timeline {
             display: flex;
             justify-content: space-between;
-            margin-top: 30px;
+            margin-top: 20px;
             background: #333;
             padding: 2px;
             border-radius: 5px;
@@ -158,13 +172,86 @@
         .timeline-item:last-child { border: none; }
         .timeline-item.bad { background: #5a2a2a; color: #ffadad; }
 
+        /* Images & Gallery - Optimized for overflow */
+        .slide-image-container {
+            margin-top: 15px;
+            text-align: center;
+            width: 100%; /* Ensure container takes full width */
+        }
+        
+        .slide-image-container img {
+            max-width: 100%; /* Prevent overflow */
+            height: auto; /* Maintain aspect ratio */
+            max-height: 250px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border: 1px solid #444;
+            object-fit: contain; /* Ensure image fits nicely */
+        }
+
+        .gallery-scroll {
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            padding: 10px 5px;
+            margin-top: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            width: 100%; /* Full width */
+            scrollbar-width: thin; /* Firefox */
+        }
+
+        .gallery-scroll img {
+            height: 200px; /* Tinggi seragam */
+            width: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            flex-shrink: 0;
+            border: 1px solid #555;
+            transition: transform 0.2s;
+            max-width: 90vw; /* Prevent huge images on mobile */
+            object-fit: cover;
+        }
+
+        .gallery-scroll img:hover {
+            transform: scale(1.02);
+            border-color: var(--primary);
+        }
+
+        /* Scrollbar for gallery */
+        .gallery-scroll::-webkit-scrollbar { height: 8px; }
+        .gallery-scroll::-webkit-scrollbar-track { background: #222; border-radius: 4px; }
+        .gallery-scroll::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+        /* Footer Info */
+        .footer-info {
+            text-align: center;
+            padding: 10px;
+            background-color: #000;
+            font-size: 0.9rem;
+            z-index: 9;
+            border-top: 1px solid #333;
+        }
+        
+        .footer-info a {
+            color: #888;
+            border-bottom: none;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+        
+        .footer-info a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
         /* Controls */
         .controls {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 20px;
-            padding: 20px;
+            padding: 15px 20px;
             background: #000;
             z-index: 10;
         }
@@ -215,13 +302,15 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            h1 { font-size: 2rem; }
-            h2 { font-size: 1.5rem; }
-            .slide { width: 90%; }
-            p, li { font-size: 1rem; }
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.4rem; }
+            .slide { width: 95%; max-height: 80vh; }
+            p, li { font-size: 0.95rem; }
             .timeline { flex-direction: column; }
             .timeline-item { margin-bottom: 5px; }
-            .controls { flex-wrap: wrap; }
+            .controls { flex-wrap: wrap; gap: 10px; }
+            .gallery-scroll img { height: 150px; }
+            .footer-info { font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -234,7 +323,7 @@
     <div class="slide-container">
         
         <!-- Slide 1: Intro -->
-        <div class="slide active">
+        <div class="slide active" style="justify-content: center;">
             <h1>Review Jujur Indosat HiFi</h1>
             <h3 style="color: #bbb;">(dulu MNC Play)</h3>
             <p style="margin-top: 20px; color: #888;">Edisi Februari 2026 | Pengalaman 1 Tahun 1 Bulan</p>
@@ -242,7 +331,8 @@
                 <p><strong>Highlight Utama:</strong></p>
                 <ul>
                     <li>Pengalaman Paket 20 Mbps (Rp 205.350)</li>
-                    <li>Uji Teknis (IPv6, Speedtest SG, ZTE 990)</li>
+                    <li>Jangkauan Sinyal Luas</li>
+                    <li>Uji Teknis (IPv6, Speedtest SG, ZTE ZXHN 679L)</li>
                     <li><span style="color: var(--success); font-weight:bold;">Killer Feature:</span> Bebas Denda Putus Langganan!</li>
                 </ul>
             </div>
@@ -257,8 +347,8 @@
                 <ol style="margin-left: 20px; color: var(--light);">
                     <li><strong>Flashback:</strong> Pengalaman Pertama (Upgrade Speed).</li>
                     <li><strong>Setup Sekarang:</strong> Paket 20 Mbps & Perangkat.</li>
-                    <li><strong>Bedah Teknis:</strong> Geek Mode (no IPv6, WPA3, international link (stabil) & belum support Smart Connect).</li>
-                    <li><strong>Drama Billing:</strong> Sisi Lain Skema Prabayar (wajib ditanyakan sebelum langganan).</li>
+                    <li><strong>Bedah Teknis:</strong> Bedah Teknis (WPA2/3 P, Link Stabil).</li>
+                    <li><strong>Drama Billing:</strong> Sisi Lain Skema Prabayar.</li>
                     <li><strong>Keunggulan Absolut:</strong> Kebijakan Tanpa Denda.</li>
                     <li><strong>Kesimpulan:</strong> Worth it atau skip?</li>
                 </ol>
@@ -268,7 +358,7 @@
         <!-- Slide 3: Flashback (First Account) -->
         <div class="slide">
             <h2>1. Pengalaman Pertama (Akhir 2024)</h2>
-            <p>Awal mula kenalan sama HiFi di rumah lama. Kesannya manis.</p>
+            <p>Awal mula kenalan sama HiFi di rumah lama. First Impression OKE.</p>
             
             <div class="highlight-box">
                 <ul>
@@ -276,6 +366,12 @@
                     <li><strong>Kejutan:</strong> Upgrade speed jadi <strong>50 Mbps</strong> selama 3 bulan di bulan ke-5 tanpa biaya tambahan.</li>
                     <li><strong>Status:</strong> Very Satisfied.</li>
                 </ul>
+            </div>
+            
+            <!-- GAMBAR TAMBAHAN SLIDE 3 -->
+            <div class="slide-image-container">
+                <img src="upgrade-speed-50Mbps.jpg" alt="Bukti Upgrade Speed 50Mbps">
+                <p class="note">Bukti Speedtest saat dapat upgrade</p>
             </div>
         </div>
 
@@ -288,28 +384,45 @@
                 <ul>
                     <li><strong>Paket:</strong> 20 Mbps.</li>
                     <li><strong>Tagihan:</strong> <strong>Rp 205.350</strong> / bulan.</li>
-                    <li><strong>Perangkat:</strong> Tetap ZTE 990 (Dual Band).</li>
+                    <li><strong>Perangkat:</strong> Tetap ZTE ZXHN 679L (Dual Band). Keunggulan: Jangkauan Sinyal Luas</li>
                 </ul>
             </div>
-            <p class="note"><strong>Catatan Penting:</strong> Cek website resmi. Paket bandwidth kecil (< 20 Mbps) biasanya hanya tersedia di area tertentu. Pastikan validasi ke website resmi sebelum deal.</p>
+            
+            <!-- GAMBAR TAMBAHAN SLIDE 4 -->
+            <div class="slide-image-container">
+                <img src="perangkat-hifi.jpg" alt="Modem ZTE ZXHN 679L Indosat HiFi">
+                <p class="note">Perangkat Modem ZTE ZXHN 679L</p>
+            </div>
+
+            <p class="note" style="margin-top: 10px;"><strong>Catatan Penting:</strong> Cek website resmi. Paket bandwidth kecil (< 20 Mbps) biasanya hanya tersedia di area tertentu.</p>
         </div>
 
         <!-- Slide 5: Bedah Teknis (Deep Dive) -->
         <div class="slide">
-            <h2>3. Bedah Teknis (Geek Mode)</h2>
-            <p>Hasil iseng-iseng nge-test jaringan & modem ZTE 990:</p>
+            <h2>3. Bedah Teknis</h2>
+            <p>Hasil iseng-iseng nge-test jaringan & modem ZTE ZXHN 679L:</p>
             <ul>
-                <li><strong>Network:</strong> No IPv6. Bonus Bandwidth +2 Mbps. Inter Link 1:1 (Verizon SG).</li>
-                <li><strong>Fitur Modem (ZTE 990):</strong>
-                    <ul>
-                        <li><span style="color: var(--success);">Plus:</span> Support <strong>WPA3 Personal</strong> (Keamanan Modern).</li>
-                        <li><span style="color: var(--danger);">Minus:</span> Belum support <strong>Smart Connect</strong>.</li>
-                    </ul>
+                <li><strong>Network:</strong> No IPv6. Bonus Bandwidth +2 Mbps. Inter Link 1:1 (Verizon Singapura).</li>
+                <li><strong>Fitur Modem:</strong>
+                     Support <strong>WPA2/3 Personal</strong>, tapi belum support <strong>Smart Connect</strong> (SSID Pisah).
                 </li>
-                <li><strong>Comparison Note:</strong>
-                    <br><span class="note">Di ZTE ini SSID 2.4G & 5G terpisah, user harus pilih manual. Kalah canggih sama router 3rd party kayak <a href="https://s.shopee.co.id/30iO2TP2oL" target="_blank" title="Beli di Shopee"><strong>TP-Link Mercusys MR60X</strong></a> (Harga ~Rp 411rb via voucher Shopee Feb 2026) yang udah bisa auto-optimize user (Smart Connect).</span>
+                <li><strong>Router Alternatif:</strong>
+                    <span class="note">Disarankan pakai <a href="https://s.shopee.co.id/30iO2TP2oL" target="_blank">TP-Link Mercusys MR60X</a> (~Rp 411rb) buat fitur Smart Connect.</span>
                 </li>
             </ul>
+
+            <!-- GALERI GAMBAR BUKTI TEKNIS (SCROLL HORIZONTAL) -->
+            <p style="margin-top: 20px; font-weight: bold; color: var(--info);">Galeri Pengujian (Scroll Kanan):</p>
+            <div class="gallery-scroll">
+                <!-- 5G Tests -->
+                <img src="speedtest-hifi-5g.jpg" alt="Speedtest 5GHz" title="Speedtest 5GHz">
+                <img src="5g-wifi.jpg" alt="Detail Wifi 5GHz" title="Detail Wifi 5GHz">
+                <img src="5g-wifi2.jpg" alt="Detail Wifi 5GHz Part 2" title="Detail Wifi 5GHz Part 2">
+                
+                <!-- 2.4G Tests -->
+                <img src="speedtest-hifi-2.4g.jpg" alt="Speedtest 2.4GHz" title="Speedtest 2.4GHz">
+                <img src="2.4g-wifi2.jpg" alt="Detail Wifi 2.4GHz" title="Detail Wifi 2.4GHz">
+            </div>
         </div>
 
         <!-- Slide 6: The Billing Drama -->
@@ -353,7 +466,7 @@
                 <ul>
                     <li>Kalau mau berhenti langganan sebelum 1 tahun, <strong>TIDAK ADA DENDA</strong>.</li>
                     <li>Biasanya provider lain kena penalti (estimasi) 500rb - 1 Juta.</li>
-                    <li>Di HiFi, cukup lapor atau tunggu saja 3 bulanan, kembalikan alat ke teknisi pengambilan alat (jgn nunggu sales, teknisi instalasi, karena beda), selesai. Tanpa drama tagihan susulan.</li>
+                    <li>Di HiFi, cukup lapor atau tunggu saja 3 bulanan, kembalikan alat ke teknisi pengambilan alat (bukan sales/instalatir), selesai.</li>
                 </ul>
             </div>
             <p>Cocok banget buat anak kos atau yang ngontrak rumah jangka pendek.</p>
@@ -366,9 +479,9 @@
             
             <div class="highlight-box">
                 <ol>
-                    <li><strong>Official Only:</strong> Bayar HANYA ke channel pembayaran resmi (App, E-Wallet, Retail Resmi). Jangan titip ke orang/teknisi.</li>
+                    <li><strong>Official Only:</strong> Bayar HANYA ke channel pembayaran resmi. Jangan titip ke orang.</li>
                     <li><strong>Cek Area:</strong> Pastikan coveragenya valid (cek tiang/brosur).</li>
-                    <li><strong>Antisipasi Billing:</strong> Karena sistem denda/isolir ribet, usahakan jangan telat bayar lewat tanggal jatuh tempo.</li>
+                    <li><strong>Antisipasi Billing:</strong> Usahakan jangan telat bayar lewat tanggal jatuh tempo biar ga rugi hari.</li>
                 </ol>
             </div>
         </div>
@@ -381,24 +494,31 @@
                     <h3 style="color: var(--success);">👍 The Good</h3>
                     <ul>
                         <li><strong>NO PENALTY</strong> (Bebas denda putus kontrak).</li>
-                        <li>Speed Internasional Stabil (1:1).</li>
-                        <li>Support <strong>WPA3</strong> (Secure).</li>
+                        <li>Speed Internasional Upload:Download = 1:1.</li>
+                        <li>Support <strong>WPA2/3 Personal</strong> (Secure dibanding Enkripsi WEP).</li>
                     </ul>
                 </div>
                 <div style="flex: 1; background: #333; padding: 20px; border-radius: 10px;">
                     <h3 style="color: var(--danger);">👎 The Bad</h3>
                     <ul>
                         <li>Billing system kaku & ribet jika telat.</li>
-                        <li>Belum <strong>Smart Connect</strong> (Pilih Manual SSID).</li>
+                        <li>Belum <strong>Smart Connect</strong> (Manual SSID).</li>
                         <li>Harus bayar hari kosong (No Prorate).</li>
                     </ul>
                 </div>
             </div>
             <p style="text-align: center; margin-top: 30px;">
-                <em>"Koneksi Joss, Perangkat Oke, tapi Sistem Bayar butuh perbaikan."</em>
+                <em>"Koneksi Joss, Perangkat Oke, tapi Sistem Bayar butuh perbaikan. Semoga makin membaik kedepannya. Aamiin"</em>
             </p>
         </div>
 
+    </div>
+
+    <!-- Global Footer for All Slides -->
+    <div class="footer-info">
+        Visit us: 
+        <a href="https://metabits.servant.my.id" target="_blank">MetaBits</a> | 
+        <a href="https://servant.my.id" target="_blank">Servant.my.id</a>
     </div>
 
     <!-- Navigation Controls -->
@@ -422,6 +542,9 @@
             
             // Show current
             slides[currentSlide].classList.add('active');
+
+            // Scroll to top of slide
+            slides[currentSlide].scrollTop = 0;
 
             // Update Progress Bar
             const percentage = ((currentSlide + 1) / slides.length) * 100;
