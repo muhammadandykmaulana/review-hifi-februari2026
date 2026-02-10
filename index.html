@@ -187,6 +187,48 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             border: 1px solid #444;
             object-fit: contain; /* Ensure image fits nicely */
+            cursor: zoom-in; /* Indicate zoomable */
+        }
+
+        /* Tab Styles */
+        .tab-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .tab-btn {
+            background: #333;
+            color: #ccc;
+            border: 1px solid #555;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: #000;
+            border-color: var(--primary);
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .tab-content.active {
+            display: flex; /* Matches gallery-scroll display */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .gallery-scroll {
@@ -194,11 +236,11 @@
             overflow-x: auto;
             gap: 15px;
             padding: 10px 5px;
-            margin-top: 15px;
             background: rgba(0,0,0,0.2);
             border-radius: 10px;
             width: 100%; /* Full width */
             scrollbar-width: thin; /* Firefox */
+            justify-content: center; /* Center images if few */
         }
 
         .gallery-scroll img {
@@ -211,6 +253,7 @@
             transition: transform 0.2s;
             max-width: 90vw; /* Prevent huge images on mobile */
             object-fit: cover;
+            cursor: zoom-in;
         }
 
         .gallery-scroll img:hover {
@@ -222,6 +265,52 @@
         .gallery-scroll::-webkit-scrollbar { height: 8px; }
         .gallery-scroll::-webkit-scrollbar-track { background: #222; border-radius: 4px; }
         .gallery-scroll::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+        /* Lightbox (Zoom) Styles */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 85%;
+            border: 2px solid #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .lightbox-close:hover {
+            color: var(--primary);
+        }
+
+        .lightbox-caption {
+            color: #fff;
+            margin-top: 15px;
+            font-size: 1.2rem;
+            text-align: center;
+        }
 
         /* Footer Info */
         .footer-info {
@@ -311,6 +400,7 @@
             .controls { flex-wrap: wrap; gap: 10px; }
             .gallery-scroll img { height: 150px; }
             .footer-info { font-size: 0.8rem; }
+            .tab-btn { padding: 6px 14px; font-size: 0.9rem; }
         }
     </style>
 </head>
@@ -318,6 +408,13 @@
 
     <div class="progress-bar">
         <div class="progress-fill" id="progress"></div>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close">&times;</span>
+        <img id="lightbox-img" src="">
+        <div id="lightbox-caption" class="lightbox-caption"></div>
     </div>
 
     <div class="slide-container">
@@ -331,8 +428,7 @@
                 <p><strong>Highlight Utama:</strong></p>
                 <ul>
                     <li>Pengalaman Paket 20 Mbps (Rp 205.350)</li>
-                    <li>Jangkauan Sinyal Luas</li>
-                    <li>Uji Teknis (IPv6, Speedtest SG, ZTE ZXHN 679L)</li>
+                    <li>Uji Teknis (IPv6, Speedtest SG, ZTE 990)</li>
                     <li><span style="color: var(--success); font-weight:bold;">Killer Feature:</span> Bebas Denda Putus Langganan!</li>
                 </ul>
             </div>
@@ -347,7 +443,7 @@
                 <ol style="margin-left: 20px; color: var(--light);">
                     <li><strong>Flashback:</strong> Pengalaman Pertama (Upgrade Speed).</li>
                     <li><strong>Setup Sekarang:</strong> Paket 20 Mbps & Perangkat.</li>
-                    <li><strong>Bedah Teknis:</strong> Bedah Teknis (WPA2/3 P, Link Stabil).</li>
+                    <li><strong>Bedah Teknis:</strong> Geek Mode (IPv6, WPA3, Link Stabil).</li>
                     <li><strong>Drama Billing:</strong> Sisi Lain Skema Prabayar.</li>
                     <li><strong>Keunggulan Absolut:</strong> Kebijakan Tanpa Denda.</li>
                     <li><strong>Kesimpulan:</strong> Worth it atau skip?</li>
@@ -370,7 +466,7 @@
             
             <!-- GAMBAR TAMBAHAN SLIDE 3 -->
             <div class="slide-image-container">
-                <img src="upgrade-speed-50Mbps.jpg" alt="Bukti Upgrade Speed 50Mbps">
+                <img src="upgrade-speed-50Mbps.jpg" alt="Bukti Upgrade Speed 50Mbps" onclick="openLightbox(this.src, this.alt)">
                 <p class="note">Bukti Speedtest saat dapat upgrade</p>
             </div>
         </div>
@@ -384,14 +480,14 @@
                 <ul>
                     <li><strong>Paket:</strong> 20 Mbps.</li>
                     <li><strong>Tagihan:</strong> <strong>Rp 205.350</strong> / bulan.</li>
-                    <li><strong>Perangkat:</strong> Tetap ZTE ZXHN 679L (Dual Band). Keunggulan: Jangkauan Sinyal Luas</li>
+                    <li><strong>Perangkat:</strong> Tetap ZTE 990 (Dual Band).</li>
                 </ul>
             </div>
             
             <!-- GAMBAR TAMBAHAN SLIDE 4 -->
             <div class="slide-image-container">
-                <img src="perangkat-hifi.jpg" alt="Modem ZTE ZXHN 679L Indosat HiFi">
-                <p class="note">Perangkat Modem ZTE ZXHN 679L</p>
+                <img src="perangkat-hifi.jpg" alt="Modem ZTE 990 Indosat HiFi" onclick="openLightbox(this.src, this.alt)">
+                <p class="note">Perangkat Modem ZTE 990</p>
             </div>
 
             <p class="note" style="margin-top: 10px;"><strong>Catatan Penting:</strong> Cek website resmi. Paket bandwidth kecil (< 20 Mbps) biasanya hanya tersedia di area tertentu.</p>
@@ -399,8 +495,8 @@
 
         <!-- Slide 5: Bedah Teknis (Deep Dive) -->
         <div class="slide">
-            <h2>3. Bedah Teknis</h2>
-            <p>Hasil iseng-iseng nge-test jaringan & modem ZTE ZXHN 679L:</p>
+            <h2>3. Bedah Teknis (Geek Mode)</h2>
+            <p>Hasil iseng-iseng nge-test jaringan & modem ZTE 990:</p>
             <ul>
                 <li><strong>Network:</strong> No IPv6. Bonus Bandwidth +2 Mbps. Inter Link 1:1 (Verizon Singapura).</li>
                 <li><strong>Fitur Modem:</strong>
@@ -411,17 +507,26 @@
                 </li>
             </ul>
 
-            <!-- GALERI GAMBAR BUKTI TEKNIS (SCROLL HORIZONTAL) -->
-            <p style="margin-top: 20px; font-weight: bold; color: var(--info);">Galeri Pengujian (Scroll Kanan):</p>
-            <div class="gallery-scroll">
-                <!-- 5G Tests -->
-                <img src="speedtest-hifi-5g.jpg" alt="Speedtest 5GHz" title="Speedtest 5GHz">
-                <img src="5g-wifi.jpg" alt="Detail Wifi 5GHz" title="Detail Wifi 5GHz">
-                <img src="5g-wifi2.jpg" alt="Detail Wifi 5GHz Part 2" title="Detail Wifi 5GHz Part 2">
-                
-                <!-- 2.4G Tests -->
-                <img src="speedtest-hifi-2.4g.jpg" alt="Speedtest 2.4GHz" title="Speedtest 2.4GHz">
-                <img src="2.4g-wifi2.jpg" alt="Detail Wifi 2.4GHz" title="Detail Wifi 2.4GHz">
+            <p style="margin-top: 15px; font-weight: bold; color: var(--info); text-align: center;">Galeri Pengujian (Klik untuk Zoom):</p>
+            
+            <!-- Tab Controls -->
+            <div class="tab-controls">
+                <button class="tab-btn active" onclick="switchTab('tab-5g', this)">Testing 5GHz</button>
+                <button class="tab-btn" onclick="switchTab('tab-24g', this)">Testing 2.4GHz</button>
+            </div>
+
+            <!-- Tab Content: 5G -->
+            <div id="tab-5g" class="gallery-scroll tab-content active">
+                <img src="speedtest-hifi-5g.jpg" alt="Speedtest 5GHz" title="Speedtest 5GHz" onclick="openLightbox(this.src, this.alt)">
+                <img src="5g-wifi.jpg" alt="Detail Wifi 5GHz" title="Detail Wifi 5GHz" onclick="openLightbox(this.src, this.alt)">
+                <img src="5g-wifi2.jpg" alt="Detail Wifi 5GHz Part 2" title="Detail Wifi 5GHz Part 2" onclick="openLightbox(this.src, this.alt)">
+            </div>
+
+            <!-- Tab Content: 2.4G -->
+            <div id="tab-24g" class="gallery-scroll tab-content">
+                <img src="speedtest-hifi-2.4g.jpg" alt="Speedtest 2.4GHz" title="Speedtest 2.4GHz" onclick="openLightbox(this.src, this.alt)">
+                <img src="2.4g-wifi.jpg" alt="Detail Wifi 2.4GHz" title="Detail Wifi 2.4GHz" onclick="openLightbox(this.src, this.alt)">
+                <img src="2.4g-wifi2.jpg" alt="Detail Wifi 2.4GHz Part 2" title="Detail Wifi 2.4GHz Part 2" onclick="openLightbox(this.src, this.alt)">
             </div>
         </div>
 
@@ -579,6 +684,45 @@
                 }
             }
         }
+
+        // --- NEW FEATURES: TABS & LIGHTBOX ---
+
+        // Switch Tabs
+        function switchTab(tabId, btnElement) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected content & activate button
+            document.getElementById(tabId).classList.add('active');
+            btnElement.classList.add('active');
+        }
+
+        // Open Lightbox
+        function openLightbox(src, caption) {
+            const lightbox = document.getElementById('lightbox');
+            const img = document.getElementById('lightbox-img');
+            const cap = document.getElementById('lightbox-caption');
+            
+            img.src = src;
+            cap.innerHTML = caption || '';
+            lightbox.style.display = 'flex';
+        }
+
+        // Close Lightbox
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+        }
+
+        // Close lightbox on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+        });
 
         // Listen for fullscreen change events to update button text
         document.addEventListener('fullscreenchange', () => {
